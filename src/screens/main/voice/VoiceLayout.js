@@ -1,13 +1,10 @@
-// import React, { Component } from 'react'
-// import { StyleSheet, View, ScrollView, Text, TouchableOpacity, Image, ActivityIndicator, FlatList } from 'react-native'
-// import { List, ListItem } from 'react-native-elements'
 import React, { Component } from 'react';
 import { Text, View, Image, StyleSheet, ActivityIndicator, TouchableOpacity, FlatList, Dimensions, ScrollView, AsyncStorage } from 'react-native';
 import { VoiceItem } from './VoiceItem'
 import axios from 'axios';
-
-// import OpenNews from './OpenNews'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
 const styles = StyleSheet.create({
@@ -36,11 +33,6 @@ const styles = StyleSheet.create({
 
 const { container, horisontalpages, indicator, formenu } = styles
 
-// const url = 'https://mygsr.ru/get_news_page?page=0&category='
-
-// type Props = {
-//     navigator: Object
-// };
 
 class VoiceLayout extends Component {
   constructor(props) {
@@ -53,6 +45,7 @@ class VoiceLayout extends Component {
 
 
     var par = this
+    // получаем выбранный город из AsyncStorage
     AsyncStorage.getItem("city").then((value) => {
       par.setState({
         cityid: JSON.parse(value).id
@@ -67,8 +60,8 @@ class VoiceLayout extends Component {
 
   makeRequest = () => {
     const { page, cityid } = this.state;
+    // получить список голосований в выбранном городе. если город пустой то придут все города
     const url = `https://mygsr.ru/get_voice_page?page=${page}&city=${cityid}`
-    console.log(url)
     axios.get(url)
       .then(res => {
         this.setState({
@@ -83,6 +76,7 @@ class VoiceLayout extends Component {
       })
   }
 
+  // подгружаем следующую страницу
   handleLoadMore = () => {
     this.setState({
       page: this.state.page + 1,
@@ -91,6 +85,7 @@ class VoiceLayout extends Component {
     })
   }
 
+  // выводим прелоадер в футере по мере прокрутки
   renderFooter = () => {
     return (
       <View style={styles.headerBg}>
@@ -100,9 +95,10 @@ class VoiceLayout extends Component {
   };
 
 
-
+  // формируем элемент списка голосования
   renderItem(item) {
     return (
+        // при нажатии на элемент переходим в открытое голосование
       <TouchableOpacity onPress={() => this.props.navigation.navigate('OpenVoiceScreen', {itemId: item.item.id})} activeOpacity={0.8}>
         <VoiceItem data={item} key={item.id} />
       </TouchableOpacity>
@@ -113,6 +109,7 @@ class VoiceLayout extends Component {
     const { isLoading } = this.state
 
 
+    // если идет загрузка отображаем прелоадер в футере
     if (this.state.isLoading) {
       return (
         <View style={{ flex: 1, padding: 20, left: -10 }}>
@@ -122,6 +119,7 @@ class VoiceLayout extends Component {
     }
 
 
+    // выводим список
     return (
       <View style={container}>
         <View style={horisontalpages}>

@@ -3,13 +3,16 @@ import { Text, View, Image, StyleSheet, Animated, Easing, ActivityIndicator, Tou
 import { NavigationEvents } from 'react-navigation';
 import { NewsItem } from './NewsItem'
 import axios from 'axios';
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
 const styles = StyleSheet.create({
   container: {
     height: h - 64
   },
+  // закладки
   bookmarks: {
     height: 30,
     width: '100%',
@@ -19,6 +22,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     zIndex: 1
   },
+  // подчеркивание активной закладки
   bookmarksline: {
     position: 'absolute',
     width: (w / 2 - 22),
@@ -26,6 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EB7155',
     bottom: 0
   },
+  // кнопка Все
   allbutton: {
     position: 'absolute',
     fontSize: 14,
@@ -33,33 +38,39 @@ const styles = StyleSheet.create({
     height: 30,
     lineHeight: 20
   },
+  // текст кнопки в закладке
   bookmarktext: {
     flex: 1,
     textAlign: 'center',
     lineHeight: 20,
     color: '#07296F'
   },
+  // кнопка фильтра
   filterbutton: {
     position: 'absolute',
     width: 44,
     height: 30,
     left: w - 44
   },
+  // иконка кнопки
   filterbuttonimg: {
     position: 'absolute',
     width: 44,
     height: 30
   },
+  // список новостей
   newslistview: {
     width: w,
     height: h - 30,
     flex: 1,
     flexDirection: 'row'
   },
+  // блок с нвоостями
   newspage: {
     width: w,
     height: h - 94
   },
+  // блок с горизонтальной прокруткой для закладок
   horisontalpages: {
     flexWrap: 'nowrap',
     flexDirection: 'row',
@@ -67,6 +78,7 @@ const styles = StyleSheet.create({
     height: h - 90,
     overflow: 'hidden'
   },
+  // прелоадер
   indicator: {
     paddingTop: 20,
     paddingBottom: 20,
@@ -179,6 +191,7 @@ class RosatomNewsLayout extends React.Component {
 
   loadCategories = () => {
     const { page } = this.state;
+    // получение категоирй новостей ГК Росатом
     const url = `https://mygsr.ru/get_rosatom_news_categories`
     axios.get(url)
       .then(res => {
@@ -205,6 +218,7 @@ class RosatomNewsLayout extends React.Component {
   makeRequest = () => {
 
     const { page, filterstring } = this.state
+    // Получить новости ГК Росатом по категории
     const url = `https://mygsr.ru/get_news_page?category=${filterstring}&page=${page}`
     axios.get(url)
       .then(res => {
@@ -224,6 +238,7 @@ class RosatomNewsLayout extends React.Component {
         this.setState({
           userdata: JSON.parse(value)
         })
+        // получить избранное
         const favurl = `https://mygsr.ru/get_favorite_page?part=13&page=${favpage}&userid=${this.state.userdata.id}`
         axios.get(favurl)
           .then(favres => {
@@ -249,6 +264,7 @@ class RosatomNewsLayout extends React.Component {
   }
 
 
+  // загрузка страницы при прокрутке
   handleLoadMore = () => {
     this.setState({
       page: this.state.page + 1,
@@ -256,6 +272,7 @@ class RosatomNewsLayout extends React.Component {
       this.makeRequest()
     })
   }
+  // загрузка страницы избранного при прокрутке
   handleLoadMoreFav = () => {
     this.setState({
       favpage: this.state.favpage + 1,
@@ -264,6 +281,7 @@ class RosatomNewsLayout extends React.Component {
     })
   }
 
+  // рисуем футер
   renderFooter = () => {
     const {isLoading } = this.state
     return (
@@ -272,6 +290,7 @@ class RosatomNewsLayout extends React.Component {
       </View>
     )
   }
+  // рисуем футер избранного
   renderFavFooter = () => {
     const {isFavLoading } = this.state
     return (
@@ -282,6 +301,7 @@ class RosatomNewsLayout extends React.Component {
   }
 
 
+  // создаем новость
   renderItem(item) {
     return (
       <TouchableOpacity onPress={() => this.props.navigation.navigate('OpenCountryNewsScreen', {itemId: item.item.id, part: 13, category: item.item.category})} activeOpacity={0.8}>
@@ -290,6 +310,7 @@ class RosatomNewsLayout extends React.Component {
     );
   }
 
+  // обработка после возврата на страницу
   handlePageChange = () => {
     this.setState({
       favdata: [],
@@ -297,6 +318,7 @@ class RosatomNewsLayout extends React.Component {
     })
     this.makeFavRequest()
   }
+  // смена активности заклаки при горизонтальном скролле
   onScroll(event) {
     if (event.nativeEvent.contentOffset.x > 0){
       let x_pos = (event.nativeEvent.contentOffset.x * (w/2-22)) / w
@@ -305,6 +327,7 @@ class RosatomNewsLayout extends React.Component {
       this.setState({ bookmarkslinex: 0 })
     }
   }
+  // нажатие на заклаки
   typePage(page){
     const { filteropen } = this.state
     this.setState({ filteropen: false })
@@ -315,6 +338,7 @@ class RosatomNewsLayout extends React.Component {
     }).start()
     this.state.anonsScrollView.scrollTo({x: w * page, y: 0, animated: true})
   }
+  // скрываем показываем фильтр
   filterPress(){
     const { filteropen } = this.state
     this.setState({ filteropen: !filteropen })
@@ -365,6 +389,7 @@ class RosatomNewsLayout extends React.Component {
     })
   }
 
+  // применить фильтр
   filterSubmit() {
 
     var ids = this.state.filterids
@@ -409,6 +434,7 @@ class RosatomNewsLayout extends React.Component {
   render() {
     const {isLoading, isFavLoading, data, favdata, bookmarkslinex, filtery, filteropen, userlogined, refreshfav, isFocused, categories, filterids } = this.state
 
+    // в зависимости открыт или нет фильтр выводим нужную иконку
     let filterimage = images.filter
     if (filteropen){
       filterimage = images.filter_active

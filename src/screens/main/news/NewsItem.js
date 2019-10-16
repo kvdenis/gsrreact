@@ -1,8 +1,9 @@
 import React from 'react'
 import { StyleSheet, View, Image, Text } from 'react-native'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину экрана
 import { w } from '../../../../constants'
-// import OpenNews from './OpenNews'
 
 const styles = StyleSheet.create({
   container: {
@@ -13,16 +14,19 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.15
   },
+  // фото
   simage: {
     width: w - 40,
     height: 162
   },
+  // дата
   datestyle: {
     fontSize: 12,
     lineHeight: 34,
     color: '#71859E',
     paddingLeft: 16
   },
+  // заголовок
   titlestyle: {
     fontSize: 16,
     lineHeight: 20,

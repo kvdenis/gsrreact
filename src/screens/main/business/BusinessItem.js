@@ -1,8 +1,7 @@
 import React from 'react'
-import { StyleSheet, View, Image, Text } from 'react-native'
-import images from 'res/images'
+import { StyleSheet, View, Text } from 'react-native'
+// добавляем ширину экрана
 import { w } from '../../../../constants'
-// import OpenNews from './OpenNews'
 
 const styles = StyleSheet.create({
   container: {
@@ -14,6 +13,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     paddingBottom: 15
   },
+  // краткий текст
   shortstyle: {
     fontSize: 12,
     lineHeight: 16,
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingBottom: 5
   },
+  // заголовок
   titlestyle: {
     fontSize: 16,
     lineHeight: 20,
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingBottom: 5
   },
+  // контакты
   contacts: {
     fontSize: 12,
     lineHeight: 16,
@@ -45,6 +47,7 @@ const BusinessItem = ({ data }) => {
   const { container, shortstyle, titlestyle, contacts } = styles
   const { title, short, site, address, email, phone } = data.item
 
+  // формируем текст контактов
   var conatcts_str = ''
   if (phone != ''){
     conatcts_str += 'Телефон: ' + phone + '\n'

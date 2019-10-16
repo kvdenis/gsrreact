@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, AsyncStorage } from 'react-native'
 import axios from 'axios'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w } from '../../../../constants'
 
 const styles = StyleSheet.create({
@@ -13,6 +15,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.15
   },
+  // аватарка
   avatar: {
     position: 'absolute',
     width: 40,
@@ -21,6 +24,7 @@ const styles = StyleSheet.create({
     top: 18,
     borderRadius: 20
   },
+  // имя
   username: {
     paddingTop: 21,
     paddingLeft: 71,
@@ -28,6 +32,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: '#07296F'
   },
+  // элемент - комментарий
   commentitem: {
     borderBottomWidth: 1,
     borderBottomColor: '#E1E0EA'
@@ -36,6 +41,7 @@ const styles = StyleSheet.create({
     height: 0,
     overflow: 'hidden'
   },
+  // текст комментария
   commenttext: {
     fontSize: 14,
     lineHeight: 16,
@@ -43,27 +49,32 @@ const styles = StyleSheet.create({
     paddingLeft: 71,
     paddingTop: 10
   },
+  // нижняя часть комментария с кайками и датой
   commentfooter: {
     width: w,
     paddingLeft: 71,
     paddingTop: 14,
     paddingBottom: 20
   },
+  // кнопка лайка
   likebtn: {
     width: 16,
     height: 14,
     flexDirection: 'row'
   },
+  // икаонка лайка
   likebtnimage: {
     width: 16,
     height: 14
   },
+  // количество лайков
   likebtntext:{
     fontSize: 11,
     lineHeight: 14,
     paddingLeft: 5,
     color: '#9B99A9'
   },
+  // правая часть футера комментария с датой
   commentfooterright: {
     position: 'absolute',
     right: 18,
@@ -73,6 +84,7 @@ const styles = StyleSheet.create({
     color: '#9B99A9',
     flexDirection: 'row'
   },
+  // кнопка удалить
   removetext: {
     fontSize: 11,
     lineHeight: 14,
@@ -93,13 +105,14 @@ class CommentItem extends Component {
     super(props)
     this.state = { userlike: 0, likecount: 0, userdata: [], isusercomment: false, isHidden: false }
     var par = this
+    // получаем данные пользователя из AsyncStorage чтобы проверить его комментарий или нет
     AsyncStorage.getItem("userdata").then((value) => {
       if (value != null){
         this.setState({
           userdata: JSON.parse(value)
         })
+        // если комменатрий его выводим у него кнопку удалить
         if (this.state.userdata.id == this.props.data.item.user.id){
-          // console.log(123)
           this.setState({
             isusercomment: true
           })
@@ -119,6 +132,7 @@ class CommentItem extends Component {
   }
 
   likePress(){
+    // ставим или убираем лайк с комментария
     if (this.state.userlike == 0){
       this.likeLike(1)
     }else{
@@ -135,7 +149,9 @@ class CommentItem extends Component {
           userdata: JSON.parse(value)
         })
 
+        // добавить комментарий в избранное
         var likeurl = 'https://mygsr.ru/addlike'
+        // если уже в избранном удаляем из избранного
         if (val == 0){
           likeurl = 'https://mygsr.ru/removelike'
         }
@@ -191,6 +207,7 @@ class CommentItem extends Component {
           userdata: JSON.parse(value)
         })
 
+        // удалить комментарий
         var url = 'https://mygsr.ru/remove_comment'
 
 
@@ -226,12 +243,7 @@ class CommentItem extends Component {
     })
     .then(res => {
     })
-
-    // console.log(this.state.isHidden)
   }
-
-  // const { item } = data
-
   render() {
     const { item } = this.props.data
     const { userlike, likecount, isusercomment, isHidden } = this.state

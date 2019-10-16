@@ -3,7 +3,9 @@ import { Text, View, Image, StyleSheet, ActivityIndicator, TouchableOpacity, Fla
 import { BonusItem } from './BonusItem'
 import axios from 'axios';
 
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
 const styles = StyleSheet.create({
@@ -17,26 +19,23 @@ const styles = StyleSheet.create({
     height: h - 60,
     overflow: 'hidden'
   },
+  // прелоадер
   indicator: {
     paddingTop: 20,
     paddingBottom: 20,
     width: w
   },
+  // стиль скрытого прелоадера
   indicatorhidden: {
     display: 'none'
   },
+  // задаем высоту футера
   footerblock: {
     height: 20
   },
-  formenu: {
-    position: 'absolute',
-    width: 10,
-    height: h,
-    backgroundColor: '#ff00ff'
-  }
 })
 
-const { container, horisontalpages, indicator, formenu, footerblock, indicatorhidden } = styles
+const { container, horisontalpages, indicator, footerblock, indicatorhidden } = styles
 
 class UserBonus extends Component {
   constructor(props) {
@@ -53,12 +52,14 @@ class UserBonus extends Component {
   makeRequest = () => {
     const { page } = this.state;
 
+    // получаем данные о пользовтаеле и загружаем его бонусы по id
     AsyncStorage.getItem("userdata").then((value) => {
 
       if (value != null){
         this.setState({
           userdata: JSON.parse(value)
         })
+        // получить список активностей пользователя
         const url = `https://mygsr.ru/get_user_bonus_page?page=${page}&userid=${JSON.parse(value).id}`
         axios.get(url)
           .then(res => {
@@ -81,6 +82,7 @@ class UserBonus extends Component {
     })
   }
 
+  // загрузка страниц данных при прокрутке
   handleLoadMore = () => {
     this.setState({
       page: this.state.page + 1,
@@ -89,6 +91,7 @@ class UserBonus extends Component {
     })
   }
 
+  // выводим прелоадер в футере при прокрутке
   renderFooter = () => {
     const {isLoading } = this.state
     return (
@@ -101,6 +104,7 @@ class UserBonus extends Component {
 
 
 
+  // выводим бонус
   renderItem(item) {
     return (
       <BonusItem data={item} key={item.id} />
@@ -108,6 +112,7 @@ class UserBonus extends Component {
   }
 
   render() {
+    // если идет загрузка выводим прелоадер в футере
     if (this.state.isLoading) {
       return (
         <View>

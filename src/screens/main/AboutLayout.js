@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import { StyleSheet, ScrollView, Image, Text, Animated } from 'react-native'
+// подключаем возможность формировать HTML в текстовом поле
 import HTMLView from 'react-native-htmlview'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../constants'
+// ссылка для получения данных
 const url = 'https://mygsr.ru/get_about'
 
+// стили основного котейнера
 const styles = StyleSheet.create({
   container: {
     width: w,
@@ -12,6 +16,7 @@ const styles = StyleSheet.create({
   }
 })
 
+// html стили текста
 const htmlstyles = StyleSheet.create({
   a: {
     color: '#07296F'
@@ -26,6 +31,7 @@ const htmlstyles = StyleSheet.create({
     paddingTop: 20
   }
 })
+// html стили второго текста
 const htmlcontactsstyles = StyleSheet.create({
   a: {
     color: '#07296F'
@@ -53,6 +59,7 @@ class AboutLayout extends Component {
     const { params } = this.props.navigation.state;
     const itemId = params ? params.itemId : null;
 
+    // получаем текст с сервера
     try {
       const response = await fetch(url)
       const data = await response.json()
@@ -64,8 +71,8 @@ class AboutLayout extends Component {
 
   render() {
     const { data } = this.state
-    const { params } = this.props.navigation.state;
-    const link = params ? params.link : null;
+    // const { params } = this.props.navigation.state;
+    // const link = params ? params.link : null;
     return (
       <ScrollView style={container}>
         <HTMLView value={'<section>'+data.contacts+"</section>"} stylesheet={htmlstyles} onLinkPress={url => this.props.navigation.navigate('WebViewScreen', {link: url})} />

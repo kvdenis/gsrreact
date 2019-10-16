@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, ScrollView, Image, Text, TouchableOpacity } from 'react-native'
 import HTMLView from 'react-native-htmlview'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
-
+// получить текст политики
 const url = 'https://mygsr.ru/get_app_policy'
 
 const styles = StyleSheet.create({
@@ -12,6 +13,7 @@ const styles = StyleSheet.create({
     height: h - 30,
     backgroundColor: 'white'
   },
+  // кнопка закрыть
   closebtn: {
     position: "absolute",
     height: 50,
@@ -19,6 +21,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f7fb",
     bottom: 0,
   },
+  // текст кнопки закрыть
   closebtntext: {
     fontSize: 17,
     lineHeight: 50,
@@ -26,7 +29,7 @@ const styles = StyleSheet.create({
     color: '#07296F',
   }
 })
-
+// hmtl стили текста
 const htmlstyles = StyleSheet.create({
   a: {
     color: '#07296F'
@@ -54,6 +57,7 @@ class ProfilePolicy extends Component {
   async componentDidMount(){
     const { params } = this.props.navigation.state;
 
+    // загружаем текст
     try {
       const response = await fetch(url)
       const data = await response.json()

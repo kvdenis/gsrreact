@@ -2,43 +2,76 @@ import React, { Component } from 'react'
 import { StyleSheet, View, Text, Image, Button, TouchableOpacity, AsyncStorage } from 'react-native'
 import images from 'res/images'
 import { StackNavigator, createDrawerNavigator, createStackNavigator, createAppContainer } from 'react-navigation'
+
+// Основное меню
 import { Menu } from './src/screens/main/Menu'
+// Новости страны
 import { CountryNewsLayout } from './src/screens/main/news/CountryNewsLayout'
+// Новости города
 import { CityNewsLayout } from './src/screens/main/news/CityNewsLayout'
+// Новости ГК Росатом
 import { RosatomNewsLayout } from './src/screens/main/news/RosatomNewsLayout'
+// Открытая новость
 import { OpenNews } from './src/screens/main/news/OpenNews'
+// Комментарии в новостях
 import { NewsCommentsLayout } from './src/screens/main/news/NewsCommentsLayout'
+// Городские прокты
 import { CityProjectsLayout } from './src/screens/main/projects/CityProjectsLayout'
+// Проекты ГК Росатом
 import { ProjectsLayout } from './src/screens/main/projects/ProjectsLayout'
+// Открытый проект
 import { OpenProject } from './src/screens/main/projects/OpenProject'
+// Голосования
 import { VoiceLayout } from './src/screens/main/voice/VoiceLayout'
+// Открытое голосование
 import { OpenVoice } from './src/screens/main/voice/OpenVoice'
+// WebView для ссылок
 import { WebViewLayout } from './src/screens/main/WebViewLayout'
+// Бизнес среда
 import { BusinessLayout } from './src/screens/main/business/BusinessLayout'
+// Справка
 import { CompaniesLayout } from './src/screens/main/business/CompaniesLayout'
+// Открытая комания из справки
 import { OpenCompany } from './src/screens/main/business/OpenCompany'
+// Открытая компании в бизнес среде
 import { OpenBusiness } from './src/screens/main/business/OpenBusiness'
+// Профиль пользователя
 import { ProfileLayout } from './src/screens/main/profile/ProfileLayout'
+// О компании
 import { AboutLayout } from './src/screens/main/AboutLayout'
+// Правила использования в профиле
 import { ProfileRules } from './src/screens/main/profile/ProfileRules'
+// Пользовательское соглашение в профиле
 import { ProfileSog } from './src/screens/main/profile/ProfileSog'
+// Политика в профиле
 import { ProfilePolicy } from './src/screens/main/profile/ProfilePolicy'
+// Уровень пользователя
 import { UserLavel } from './src/screens/main/profile/UserLavel'
+// Бонусы пользователя
 import { UserBonus } from './src/screens/main/profile/UserBonus'
+// Страница авторизации
 import { AuthLayout } from './src/screens/main/AuthLayout'
+// Модальное окно выбора города
 import { CitySelectLayout } from './src/screens/main/CitySelectLayout'
+// Анонасы, объявления
 import { AnonsLayout } from './src/screens/main/anons/AnonsLayout'
+// Оькрытый анонс
 import { OpenAnons } from './src/screens/main/anons/OpenAnons'
+// Открытое объявление
 import { OpenAds } from './src/screens/main/anons/OpenAds'
+// Сообщества
 import { BlogLayout } from './src/screens/main/BlogLayout'
+// Получение размеров экрана
 import { w, h } from './constants'
 
 
+// стили навигатора
 const styles = StyleSheet.create({
   mainview: {
     backgroundColor: '#f5f6f9',
     height: h
   },
+  // шапка с элементами навигации
   header: {
     paddingTop: 20,
     flexDirection: 'row',
@@ -48,11 +81,13 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOpacity: 0.1
   },
+  // стили заголовка
   pagetitle: {
     fontSize: 16,
     lineHeight: 44,
     color: '#07296F'
   },
+  // бургер
   burger: {
     position: 'absolute',
     width: 44,
@@ -60,27 +95,30 @@ const styles = StyleSheet.create({
     left: 0,
     top: 20
   },
+  // стрелка назад
   backarrow: {
     width: 44,
     height: 44
   },
+  // правая кнопка в шапке
   headerrightbtn: {
     width: 44,
     height: 44
   }
 })
 
-
+// стили в объекте
 const { backarrow, headerrightbtn } = styles
 
-// AsyncStorage.getItem('profileLogin') ? props.navigation.navigate('ProfileScreen') : props.navigation.navigate('Auth')
-
+// добавление Drawer
 const DrawerConfig = {
   drawerWidth: w+10,
   contentComponent: ({ navigation }) => {
     return (<Menu navigation={navigation} />)
   }
 }
+
+// Левая кнопка в шапке
 const DrawerButton = (props) => {
 	return (
     <View>
@@ -90,15 +128,20 @@ const DrawerButton = (props) => {
     </View>
   );
 };
+
+// Кнопка для открытия профиля в шапке
 const ProfileButton = (props) => {
 	return (
     <View>
       <TouchableOpacity onPress={() => {
+        // получение данных о пользователе из AsyncStorage
         AsyncStorage.getItem('userdata').then((keyValue) => {
           if (keyValue != null){
+            // если данные есть перекидываем в профиль
             props.navigation.navigate('ProfileScreen')
 
           }else{
+            // если данных нет открываем окно авторизации
             props.navigation.navigate('Auth')
           }
         }, (error) => {
@@ -111,8 +154,10 @@ const ProfileButton = (props) => {
   );
 };
 
+// прописываем страницы в навигаторе
 const AppNavigator = createStackNavigator(
   {
+    // раздел новостей страны
     CountryNewsScreen: {
       screen: CountryNewsLayout,
       navigationOptions:({navigation}) => ({
@@ -136,6 +181,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // WebView для ссылок
     WebViewScreen: {
       screen: WebViewLayout,
       navigationOptions:({navigation}) => ({
@@ -160,6 +206,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Новости города
     CityNewsScreen: {
       screen: CityNewsLayout,
       navigationOptions:({navigation}) => ({
@@ -182,6 +229,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Новости росатома
     RosatomNewsScreen: {
       screen: RosatomNewsLayout,
       navigationOptions:({navigation}) => ({
@@ -204,6 +252,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Открытая новость страны
     OpenCountryNewsScreen: {
       screen: OpenNews,
       navigationOptions:({navigation}) => ({
@@ -228,6 +277,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Открытая новость города
     OpenCityNewsScreen: {
       screen: OpenNews,
       navigationOptions:({navigation}) => ({
@@ -252,6 +302,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Открытая новость ГК Росатом
     OpenRosatomNewsScreen: {
       screen: OpenNews,
       navigationOptions:({navigation}) => ({
@@ -276,6 +327,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Экран комментариев для новости
     NewsCommentsLayoutScreen: {
       screen: NewsCommentsLayout,
       navigationOptions:({navigation}) => ({
@@ -299,6 +351,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Городские проекты
     CityProjectsScreen: {
       screen: CityProjectsLayout,
       navigationOptions:({navigation}) => ({
@@ -321,6 +374,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Проекты ГК Росатом
     ProjectsScreen: {
       screen: ProjectsLayout,
       navigationOptions:({navigation}) => ({
@@ -346,6 +400,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Открытый городской проект
     OpenCityProjectsScreen: {
       screen: OpenProject,
       navigationOptions:({navigation}) => ({
@@ -370,6 +425,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Открытый проект ГК Росатом
     OpenProjectsScreen: {
       screen: OpenProject,
       navigationOptions:({navigation}) => ({
@@ -394,6 +450,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Голосования
     VoiceScreen: {
       screen: VoiceLayout,
       navigationOptions:({navigation}) => ({
@@ -419,6 +476,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Открытое голосование
     OpenVoiceScreen: {
       screen: OpenVoice,
       navigationOptions:({navigation}) => ({
@@ -443,6 +501,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Бизнес среда
     BusinessScreen: {
       screen: BusinessLayout,
       navigationOptions:({navigation}) => ({
@@ -465,6 +524,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Справка
     CompaniesScreen: {
       screen: CompaniesLayout,
       navigationOptions:({navigation}) => ({
@@ -487,6 +547,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Открытая компания в справке
     OpenCompanyScreen: {
       screen: OpenCompany,
       navigationOptions:({navigation}) => ({
@@ -511,6 +572,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Открытая компания в бизнес среде
     OpenBusinessScreen: {
       screen: OpenBusiness,
       navigationOptions:({navigation}) => ({
@@ -535,6 +597,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // О нас
     AboutScreen: {
       screen: AboutLayout,
       navigationOptions:({navigation}) => ({
@@ -559,6 +622,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Сообщества
     BlogScreen: {
       screen: BlogLayout,
       navigationOptions:({navigation}) => ({
@@ -583,6 +647,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Профиль
     ProfileScreen: {
       screen: ProfileLayout,
       navigationOptions:({navigation}) => ({
@@ -604,6 +669,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Уровни пользователя
     UserLavelScreen: {
       screen: UserLavel,
       navigationOptions:({navigation}) => ({
@@ -628,6 +694,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Бонусы пльзователя
     UserBonusScreen: {
       screen: UserBonus,
       navigationOptions:({navigation}) => ({
@@ -651,6 +718,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Правила
     ProfileRulesScreen: {
       screen: ProfileRules,
       navigationOptions:({navigation}) => ({
@@ -674,6 +742,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Анонсы, объявления
     AnonsScreen: {
       screen: AnonsLayout,
       navigationOptions:({navigation}) => ({
@@ -696,6 +765,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Открытый анонс
     OpenAnonsScreen: {
       screen: OpenAnons,
       navigationOptions:({navigation}) => ({
@@ -720,6 +790,7 @@ const AppNavigator = createStackNavigator(
         headerBackImage: <Image style={backarrow} source={images.back} resizeMode="cover" />
       })
     },
+    // Открытое объявление
     OpenAdsScreen: {
       screen: OpenAds,
       navigationOptions:({navigation}) => ({
@@ -751,7 +822,7 @@ const AppNavigator = createStackNavigator(
 )
 
 
-
+// Создание основного навигатора
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: {
@@ -842,6 +913,8 @@ const DrawerNavigator = createDrawerNavigator(
   DrawerConfig
 )
 
+
+// Добавление в основной навигатор модальных окон авторизации, выбора города, соглашение и политики
 const RootNavigator = createStackNavigator(
   {
     MainApp: {
@@ -865,7 +938,7 @@ const RootNavigator = createStackNavigator(
   }
 )
 
-
+// отрисовываем
 class App extends Component {
   constructor(props) {
     super(props)

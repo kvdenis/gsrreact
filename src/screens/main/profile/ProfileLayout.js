@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { StyleSheet, ScrollView, View, Image, Text, Animated, TouchableOpacity, AsyncStorage, Button, Easing } from 'react-native'
 import Switch from 'react-native-switch-pro'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
 const styles = StyleSheet.create({
@@ -190,6 +192,8 @@ class ProfileLayout extends Component {
     this.state = { data: [], profileData: {}, bookmarkslinex: 0, profileScrollView: null}
   }
 
+
+  // разлогиниться
   static navigationOptions = ({ navigation }) => {
     return {
       headerRight: (
@@ -207,6 +211,7 @@ class ProfileLayout extends Component {
   };
 
   async componentDidMount() {
+    // получаем данные пользователя
     try {
       AsyncStorage.getItem('userdata', (err, result) => {
         if (result){
@@ -220,10 +225,12 @@ class ProfileLayout extends Component {
     }
   }
 
+  // прокрутка блока с закладками и выбор активной закладки
   onScroll(event) {
     this.setState({ bookmarkslinex: event.nativeEvent.contentOffset.x/2 })
   }
 
+  // нажатие на закладку
   bookmarkPage(page){
     this.state.profileScrollView.scrollTo({x: w * page, y: 0, animated: true})
   }

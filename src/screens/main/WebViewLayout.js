@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, WebView } from 'react-native'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../constants'
 
 const styles = StyleSheet.create({

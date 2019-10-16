@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 import { StyleSheet, ScrollView, Image, Text, Animated, ListView, TouchableOpacity, View, AsyncStorage } from 'react-native'
 import HTMLView from 'react-native-htmlview'
 import axios from 'axios'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
+// ссылка для получения данных
 const url = 'https://mygsr.ru/get_anons_by_id?id='
 
 const styles = StyleSheet.create({
@@ -13,18 +16,22 @@ const styles = StyleSheet.create({
     height: h - 64,
     backgroundColor: 'white'
   },
+  // скрытый контенер
   containerhidden: {
     display: 'none'
   },
+  // оснвоноей контенер со сроллом
   scrollcontainer: {
     position: 'absolute',
     width: w,
     height: h - 104
   },
+  // фото анонса
   simage: {
     width: w,
     height: 187
   },
+  // дата
   datestyle: {
     fontSize: 12,
     lineHeight: 14,
@@ -32,6 +39,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingTop: 20
   },
+  // заголовок
   titlestyle: {
     fontSize: 16,
     lineHeight: 20,
@@ -41,6 +49,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingTop: 16
   },
+  // текст
   textstyle: {
     fontSize: 14,
     lineHeight: 18,
@@ -49,6 +58,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     opacity: 0.3
   },
+  // футер
   anonsfooter:{
     position: 'absolute',
     width: w,
@@ -56,6 +66,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#f2f7fb'
   },
+  // иконка с календарем
   afishaicon: {
     position: 'absolute',
     width: 40,
@@ -63,6 +74,7 @@ const styles = StyleSheet.create({
     left: 10,
     top: 5
   },
+  // кнопка для перехода к странице
   afishabtn:{
     position: 'absolute',
     width: w - 60,
@@ -70,12 +82,14 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0
   },
+  // текст кнопки
   afishabtntext:{
     left: 55,
     lineHeight: 50,
     fontSize: 17,
     color: '#07296F'
   },
+  // икаонка избранного
   faviconbtn:{
     position: 'absolute',
     width: 50,
@@ -83,12 +97,15 @@ const styles = StyleSheet.create({
     left: w - 50,
     top: 0
   },
+  // изображение иконки
   favicon:{
     width: 50,
     height: 50
   }
 
 })
+
+// html стили текста
 const htmlstyles = StyleSheet.create({
   a: {
     color: '#07296F'
@@ -120,7 +137,7 @@ class OpenAnons extends Component {
     const itemId = params ? params.itemId : null;
     this.setState({ itemId: itemId })
 
-
+    // получаем данные пользователя чтобы по id узнать в избранном или нет
     AsyncStorage.getItem("userdata").then((value) => {
       if (value != null){
         this.setState({
@@ -130,6 +147,7 @@ class OpenAnons extends Component {
       }else{
 
       }
+      // определяем избранное или нет
       const favurl = `https://mygsr.ru/is_favorite_ios?part=3&partid=${itemId}&userid=${this.state.userdata.id}&token=${this.state.userdata.token}`
 
       console.log(favurl)
@@ -154,6 +172,7 @@ class OpenAnons extends Component {
   addRemoveFavourite() {
     const { isfav } = this.state
     const par = this
+    // получаем данные ползователя чтобы передать данные на удаление или добавление в избранное
     AsyncStorage.getItem("userdata").then((value) => {
 
       if (value != null){
@@ -161,7 +180,9 @@ class OpenAnons extends Component {
           userdata: JSON.parse(value)
         })
 
+        // добавление в избранное
         var favapiurl = 'https://mygsr.ru/addfavorite'
+        // если уже в избранном удаляем из избранного
         if (isfav > 0){
           favapiurl = 'https://mygsr.ru/removefavorite'
         }
@@ -207,6 +228,7 @@ class OpenAnons extends Component {
     });
   }
 
+  // при прокрутке масштабируем изображение
   onScroll(event) {
     if (event.nativeEvent.contentOffset.y < 0){
       this.setState({

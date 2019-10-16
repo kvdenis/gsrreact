@@ -3,13 +3,16 @@ import { Text, View, Image, StyleSheet, Animated, Easing, ActivityIndicator, Tou
 import { NavigationEvents } from 'react-navigation';
 import { ProjectItem } from './ProjectItem'
 import axios from 'axios';
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
 const styles = StyleSheet.create({
   container: {
     height: h - 64
   },
+  // закладки
   bookmarks: {
     height: 30,
     width: '100%',
@@ -19,6 +22,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     zIndex: 1
   },
+  // подчеркивание активной закладки
   bookmarksline: {
     position: 'absolute',
     width: (w / 2 - 22),
@@ -26,6 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EB7155',
     bottom: 0
   },
+  // кнопка Все
   allbutton: {
     position: 'absolute',
     fontSize: 14,
@@ -33,33 +38,39 @@ const styles = StyleSheet.create({
     height: 30,
     lineHeight: 20
   },
+  // текст кнопки в закладке
   bookmarktext: {
     flex: 1,
     textAlign: 'center',
     lineHeight: 20,
     color: '#07296F'
   },
+  // кнопка фильтра
   filterbutton: {
     position: 'absolute',
     width: 44,
     height: 30,
     left: w - 44
   },
+  // иконка кнопки
   filterbuttonimg: {
     position: 'absolute',
     width: 44,
     height: 30
   },
+  // список новостей
   newslistview: {
     width: w,
     height: h - 30,
     flex: 1,
     flexDirection: 'row'
   },
+  // блок с нвоостями
   newspage: {
     width: w,
     height: h - 94
   },
+  // блок с горизонтальной прокруткой для закладок
   horisontalpages: {
     flexWrap: 'nowrap',
     flexDirection: 'row',
@@ -67,11 +78,13 @@ const styles = StyleSheet.create({
     height: h - 90,
     overflow: 'hidden'
   },
+  // прелоадер
   indicator: {
     paddingTop: 20,
     paddingBottom: 20,
     width: w
   },
+  // скрываем индикатор
   indicatorhidden: {
     display: 'none'
   },
@@ -86,6 +99,7 @@ const styles = StyleSheet.create({
     height: h,
     backgroundColor: '#ff00ff'
   },
+  // окно фильтра
   filterview: {
     position: 'absolute',
     width: w,
@@ -97,9 +111,11 @@ const styles = StyleSheet.create({
   favlist: {
 
   },
+  // скрываем список избранного
   hiddenfavlist: {
     display: 'none'
   },
+  // заголовок категорий в фильтре
   categoriestitle: {
     fontSize: 17,
     lineHeight: 20,
@@ -108,11 +124,13 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     color: '#07296F'
   },
+  // категория в фильтре
   filteritem: {
     paddingLeft: 30,
     paddingTop: 10,
     flexDirection: 'row'
   },
+  // чекбокс категории
   filterchb: {
     width: 17,
     height: 17,
@@ -121,10 +139,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#07296F'
   },
+  // текст категории
   filtertitle: {
     fontSize: 16,
     color: '#07296F'
   },
+  // чекбокс активен
   filterchbselect: {
     width: 17,
     height: 17,
@@ -134,18 +154,21 @@ const styles = StyleSheet.create({
     borderColor: '#07296F',
     backgroundColor: '#07296F'
   },
+  // кнопка применить
   filtersubmit: {
     marginLeft: 30,
     width: w - 60,
     height: 48,
     marginTop: 30
   },
+  // фон кнопки
   filtersubmitimg: {
     position: 'absolute',
     width: w - 60,
     height: 48,
     borderRadius: 24
   },
+  // текст кнопки
   filtersubmittext: {
     width: w - 60,
     lineHeight: 48,
@@ -153,6 +176,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 17
   },
+  // выпадающий список города
   cityfilter: {
     marginLeft: 30,
     marginTop: 30,
@@ -163,12 +187,14 @@ const styles = StyleSheet.create({
     width: w - 60,
     borderRadius: 24
   },
+  // текст выпадающего списка
   cityfiltertext:{
     paddingLeft: 20,
     lineHeight: 44,
     fontSize: 13,
     color: '#71859E'
   },
+  // стрелочка выпадающег списка
   cityfilterarrow: {
     position: 'absolute',
     width: 10,
@@ -176,6 +202,7 @@ const styles = StyleSheet.create({
     right: 20,
     top: 20
   },
+  // футер
   footerblock: {
     height: 20
   }
@@ -199,6 +226,7 @@ class CityProjectsLayout extends Component {
   componentDidMount = async () => {
 
     var par = this
+    // получаем данные о городе в AsyncStorage
     AsyncStorage.getItem("city").then((value) => {
       par.setState({
         filtercity: JSON.parse(value).title,
@@ -220,6 +248,7 @@ class CityProjectsLayout extends Component {
   makeRequest = () => {
 
     const { page, cityid } = this.state
+    // получить новости города по выбранному городу
     const url = `https://mygsr.ru/get_city_projects_page?page=${page}&city=${cityid}`
     axios.get(url)
       .then(res => {
@@ -239,6 +268,7 @@ class CityProjectsLayout extends Component {
         this.setState({
           userdata: JSON.parse(value)
         })
+        // получить избранные
         const favurl = `https://mygsr.ru/get_favorite_page?part=9&page=${favpage}&userid=${this.state.userdata.id}`
         axios.get(favurl)
           .then(favres => {
@@ -262,6 +292,7 @@ class CityProjectsLayout extends Component {
   }
 
 
+  // загрузка страницы при прокрутке
   handleLoadMore = () => {
     this.setState({
       page: this.state.page + 1,
@@ -269,6 +300,7 @@ class CityProjectsLayout extends Component {
       this.makeRequest()
     })
   }
+  // загрузка страницы избранного при прокрутке
   handleLoadMoreFav = () => {
     this.setState({
       favpage: this.state.favpage + 1,
@@ -277,6 +309,7 @@ class CityProjectsLayout extends Component {
     })
   }
 
+  // рисуем футер
   renderFooter = () => {
     const {isLoading } = this.state
     return (
@@ -285,6 +318,7 @@ class CityProjectsLayout extends Component {
       </View>
     )
   }
+  // рисуем футер избранного
   renderFavFooter = () => {
     const {isFavLoading } = this.state
     return (
@@ -295,6 +329,7 @@ class CityProjectsLayout extends Component {
   }
 
 
+  // обработка после возврата на страницу при выборе нового города в меню
   handlePageChange = () => {
     var par = this
     AsyncStorage.getItem("city").then((value) => {
@@ -312,6 +347,7 @@ class CityProjectsLayout extends Component {
       par.makeFavRequest()
     })
   }
+  // смена активности заклаки при горизонтальном скролле
   onScroll(event) {
     if (event.nativeEvent.contentOffset.x > 0){
       let x_pos = (event.nativeEvent.contentOffset.x * (w/2-22)) / w
@@ -320,6 +356,7 @@ class CityProjectsLayout extends Component {
       this.setState({ bookmarkslinex: 0 })
     }
   }
+  // нажатие на заклаки
   typePage(page){
     const { filteropen } = this.state
     this.setState({ filteropen: false })
@@ -331,6 +368,7 @@ class CityProjectsLayout extends Component {
     console.log(page)
     this.state.anonsScrollView.scrollTo({x: w * page, y: 0, animated: true})
   }
+  // скрываем показываем фильтр
   filterPress(){
     const { filteropen } = this.state
     this.setState({ filteropen: !filteropen })
@@ -349,8 +387,10 @@ class CityProjectsLayout extends Component {
     }
   }
 
+  // применить фильтр
   filterSubmit() {
     const { page, cityid } = this.state
+    // применить фильтр по городу
     const url = `https://mygsr.ru/get_city_projects_page?page=0&city=${cityid}`
     this.setState({
       page: 0,
@@ -387,6 +427,7 @@ class CityProjectsLayout extends Component {
   render() {
     const {isLoading, isFavLoading, data, favdata, bookmarkslinex, filtery, filteropen, userlogined, refreshfav, isFocused, categories, filterids, filtercity } = this.state
 
+    // в зависимости открыт или нет фильтр выводим нужную иконку
     let filterimage = images.filter
     if (filteropen){
       filterimage = images.filter_active

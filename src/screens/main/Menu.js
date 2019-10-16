@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { Modal, StyleSheet, View, Image, TouchableOpacity, Text, Dimentions, AsyncStorage } from 'react-native'
 import { StackNavigator, NavigationEvents } from 'react-navigation'
+// импорт картинок
 import images from 'res/images'
+// импортируем массив с пунктами меню
 import menuitems from 'res/menuitems'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../constants'
 
 const koef = w / 375
@@ -10,6 +13,7 @@ const styles = StyleSheet.create({
   container: {
     width: w
   },
+  // первый треугольник в меню
   preloader_t1: {
     position: 'absolute',
     width: 582 / 2,
@@ -17,6 +21,7 @@ const styles = StyleSheet.create({
     top: -20,
     right: 0
   },
+  // второй трекугольник в меню
   preloader_t2: {
     position: 'absolute',
     width: 394 / 2,
@@ -24,12 +29,14 @@ const styles = StyleSheet.create({
     top: -20,
     right: 0
   },
+  // логотип
   preloader_logo: {
     position: 'absolute',
     width: w,
     height: 78,
     top: 21
   },
+  // спииок иконок с сылками
   menuitemlist: {
     position: 'absolute',
     width: w,
@@ -41,15 +48,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
+  // иконка с текстом
   menuitem: {
     alignItems: 'center',
     width: w / 3,
     marginBottom: 20 * koef
   },
+  // иконка
   menuimage: {
     width: 63 * koef,
     height: 63 * koef
   },
+  // текст иконки
   menulabel: {
     paddingLeft: 10 * koef,
     paddingRight: 10 * koef,
@@ -59,11 +69,13 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: '#ffffff'
   },
+  // фон меню
   menubg: {
     position: 'absolute',
     width: w+10,
     height: h
   },
+  // футер с кнопками
   menufooter: {
     position: 'absolute',
     left: 0,
@@ -71,6 +83,7 @@ const styles = StyleSheet.create({
     height: 71,
     width: w
   },
+  // фон кнопки выбора города
   menufootercitybg: {
     position: 'absolute',
     height: 71,
@@ -78,6 +91,7 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0
   },
+  // кнопка выбора города
   menufootercity: {
     position: 'absolute',
     height: 71,
@@ -85,6 +99,7 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0
   },
+  // фон кнопки профиля
   menufooterprofilebg: {
     position: 'absolute',
     height: 71,
@@ -92,6 +107,7 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0
   },
+  // кнопка профиля
   menufooterprofile: {
     position: 'absolute',
     height: 71,
@@ -99,6 +115,7 @@ const styles = StyleSheet.create({
     left: w / 2,
     top: 0
   },
+  // текст кнопки профиля
   menufootertext: {
     fontSize: 14,
     lineHeight: 20,
@@ -112,10 +129,12 @@ const { container, preloader_t1, preloader_t2, preloader_logo, menuitemlist, men
 class Menu extends Component {
   constructor(props) {
     super(props)
+    // по умолчанию вместо имени стоит надпись Войти и вместо города Все города
     this.state = { data: [], profileData: null, profileName: 'Войти', profileLogin: false, citytitle: 'Все города'}
   }
 
   componentDidMount() {
+    // проверяем наличие авторизации в AsyncStorage и меняем данные если пользовател авторизован
     try {
       this.setState({ profileName: 'Войти' })
       AsyncStorage.getItem('userdata', (err, result) => {
@@ -133,6 +152,7 @@ class Menu extends Component {
 
   handlePageChange = () => {
     var par = this
+    // провыеряем наличие выбранного города в AsyncStorage и меняем навзание если город был выбран
     try {
       AsyncStorage.getItem('city', (err, result) => {
         if (result){
@@ -151,7 +171,9 @@ class Menu extends Component {
     }
   }
 
+  // после возврата со страницы авторизации
   componentWillReceiveProps = (props) => {
+    // после успешной авторизации прописываем данные в State
     try {
       AsyncStorage.getItem('userdata', (err, result) => {
         if (result){

@@ -3,8 +3,10 @@ import { StyleSheet, View, ScrollView, Image, TouchableOpacity, Text, Dimentions
 import FontAwesome, { Icons } from 'react-native-fontawesome'
 import { Input, Button } from 'react-native-elements'
 import { StackNavigator } from 'react-navigation'
+// импорт картинок
 import images from 'res/images'
 import menuitems from 'res/menuitems'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../constants'
 
 const koef = w / 375
@@ -12,8 +14,6 @@ const styles = StyleSheet.create({
   container: {
     width: w,
     height: h
-    // flex: 1,
-    // justifyContent: 'space-around'
   },
   loginlogo: {
     width: 217*koef,
@@ -217,11 +217,14 @@ class AuthLayout extends Component {
   async componentDidMount() {
     this.setState({ fontLoaded: true })
   }
+  // валидация email
   validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
     return re.test(email)
   }
+
+  // авторизация
   login = async() => {
     const { email, password } = this.state
     this.setState({ isLoading: true })
@@ -231,6 +234,7 @@ class AuthLayout extends Component {
       isPasswordValid: password.length >= 3 || this.passwordInput.shake(),
     })
     if (this.validateEmail(email) && password.length >= 3){
+      // ссылка для получения данных
       const url = `https://mygsr.ru/userlogin`
       var data = {
        email: email,
@@ -273,6 +277,8 @@ class AuthLayout extends Component {
     }
   }
 
+
+  // восстановление пароля
   restore = async() => {
       const { restoreemail } = this.state
       this.setState({ isLoading: true })
@@ -281,6 +287,7 @@ class AuthLayout extends Component {
         isRestoreEmailValid: this.validateEmail(restoreemail) || this.restoreEmailInput.shake(),
       })
       if (this.validateEmail(restoreemail)){
+        // ссылка для восстанволения пароля. передается email
         const url = `https://mygsr.ru/restore.php?email=`+restoreemail
         var data = {
          email: restoreemail
@@ -313,6 +320,7 @@ class AuthLayout extends Component {
       }
   }
 
+  // открыть страницу регситрации
   regPage(){
     this.setState({
       isRegPage: true,
@@ -342,6 +350,8 @@ class AuthLayout extends Component {
     });
   }
 
+
+  // обработка плейсхолдеров
   onEmailFocus() {
     const { email, password } = this.state
     this.setState({

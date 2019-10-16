@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 import { StyleSheet, ScrollView, Image, Text, Animated, ListView, TouchableOpacity, View, AsyncStorage } from 'react-native'
 import HTMLView from 'react-native-htmlview'
 import axios from 'axios'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
+// ссылка для получения данных
 const url = 'https://mygsr.ru/get_ads_by_id?id='
 
 const styles = StyleSheet.create({
@@ -13,14 +16,17 @@ const styles = StyleSheet.create({
     height: h - 64,
     backgroundColor: 'white'
   },
+  // скрытый контейнер
   containerhidden: {
     display: 'none'
   },
+  // контенер с прокруткой текста
   scrollcontainer: {
     position: 'absolute',
     width: w,
     height: h - 104
   },
+  // дата
   datestyle: {
     fontSize: 14,
     lineHeight: 14,
@@ -28,6 +34,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingTop: 20
   },
+  // время
   timestyle:{
     fontSize: 14,
     lineHeight: 14,
@@ -36,6 +43,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 20
   },
+  // заголовок
   titlestyle: {
     fontSize: 16,
     lineHeight: 20,
@@ -45,6 +53,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingTop: 16
   },
+  // текст
   textstyle: {
     fontSize: 14,
     lineHeight: 18,
@@ -53,6 +62,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     opacity: 0.3
   },
+  // иконка избранного
   faviconbtn: {
     position: 'absolute',
     width: 50,
@@ -60,6 +70,7 @@ const styles = StyleSheet.create({
     left: w - 50,
     top: 0
   },
+  // изображение иконки
   favicon:{
     width: 50,
     height: 50
@@ -97,7 +108,7 @@ class OpenAds extends Component {
     const itemId = params ? params.itemId : null;
     this.setState({ itemId: itemId })
 
-
+  // получаем данные пользователя  чтобы проверить в избранном или нет
     AsyncStorage.getItem("userdata").then((value) => {
       if (value != null){
         this.setState({
@@ -107,6 +118,7 @@ class OpenAds extends Component {
       }else{
 
       }
+      // определяем избранное или нет
       const favurl = `https://mygsr.ru/is_favorite_ios?part=4&partid=${itemId}&userid=${this.state.userdata.id}&token=${this.state.userdata.token}`
 
       console.log(favurl)
@@ -132,6 +144,7 @@ class OpenAds extends Component {
   addRemoveFavourite() {
     const { isfav } = this.state
     const par = this
+    // получаем данные пользовтаеля для добавления или удалени из избранного
     AsyncStorage.getItem("userdata").then((value) => {
 
       if (value != null){
@@ -139,7 +152,9 @@ class OpenAds extends Component {
           userdata: JSON.parse(value)
         })
 
+        // добавление в избранное
         var favapiurl = 'https://mygsr.ru/addfavorite'
+        // если уже в избранном то удаляем из мзбранного
         if (isfav > 0){
           favapiurl = 'https://mygsr.ru/removefavorite'
         }
@@ -177,6 +192,7 @@ class OpenAds extends Component {
           console.log(error);
         })
       }else{
+        // елси не атворизован открываем окно авторизации
         this.props.navigation.navigate('Auth')
       }
 

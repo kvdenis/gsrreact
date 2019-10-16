@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { StackNavigator } from 'react-navigation'
+// импорт картинок
 import images from 'res/images'
 
 const styles = StyleSheet.create({

@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, ScrollView, Image, Text, TouchableOpacity, AsyncStorage } from 'react-native'
 import HTMLView from 'react-native-htmlview'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
+// получить уровень пользователя
 const url = 'https://mygsr.ru/get_levels?id='
 
 const styles = StyleSheet.create({
@@ -12,6 +15,7 @@ const styles = StyleSheet.create({
     height: h - 30,
     backgroundColor: 'white'
   },
+  // закрыть
   closebtn: {
     position: "absolute",
     height: 50,
@@ -19,12 +23,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f7fb",
     bottom: 0,
   },
+  // текст кнопки закрыть
   closebtntext: {
     fontSize: 17,
     lineHeight: 50,
     textAlign: 'center',
     color: '#07296F',
   },
+  // заголовок уровня
   laveltitle: {
     fontSize: 20,
     paddingLeft: 10,
@@ -32,6 +38,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginTop: 20
   },
+  // текст уровня
   laveltext: {
     fontSize: 14,
     paddingLeft: 10,
@@ -40,6 +47,7 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     marginTop: 8
   },
+  // голубой заголовок шкалы прогресса
   lavelprogresstitleblue: {
     fontSize: 14,
     paddingLeft: 10,
@@ -48,6 +56,7 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     marginTop: 10
   },
+  // красный заголовок шкалы прогресса
   lavelprogresstitlered: {
     fontSize: 14,
     paddingLeft: 10,
@@ -56,6 +65,7 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     marginTop: 10
   },
+  // шкала прогресса
   lavelprogress: {
     width: w - 60,
     left: 10,
@@ -65,6 +75,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     backgroundColor: '#DFE2E6'
   },
+  // цвета закрашиваемой шкалы
   lavelprogressimg:{
     height: 8,
     borderRadius: 4,
@@ -80,7 +91,10 @@ class UserLavel extends Component {
     this.state = { data: [], profileData: {}, levelData: {} }
   }
 
+
   async componentDidMount(){
+
+    // получаем данные о пользователе и запрашиваем уго уровень
     try {
       AsyncStorage.getItem('userdata', (err, result) => {
         if (result){
@@ -100,6 +114,7 @@ class UserLavel extends Component {
   }
 
   async loadLavelData(){
+    // записываем полученный уровень для отрисовки
     try {
       const response = await fetch(url + this.state.profileData.id)
       const data = await response.json()

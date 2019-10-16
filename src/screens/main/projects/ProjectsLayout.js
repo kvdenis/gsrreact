@@ -3,13 +3,16 @@ import { Text, View, Image, StyleSheet, ActivityIndicator, TouchableOpacity, Fla
 import { ProjectItem } from './ProjectItem'
 import axios from 'axios';
 
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
 const styles = StyleSheet.create({
   container: {
     height: h - 64
   },
+  // основной блок с прокруткой
   horisontalpages: {
     flexWrap: 'nowrap',
     flexDirection: 'row',
@@ -17,26 +20,23 @@ const styles = StyleSheet.create({
     height: h - 60,
     overflow: 'hidden'
   },
+  // прелоадер
   indicator: {
     paddingTop: 20,
     paddingBottom: 20,
     width: w
   },
+  // скрываем прелоадер
   indicatorhidden: {
     display: 'none'
   },
+  // назначаем высоту футеру
   footerblock: {
     height: 20
-  },
-  formenu: {
-    position: 'absolute',
-    width: 10,
-    height: h,
-    backgroundColor: '#ff00ff'
   }
 })
 
-const { container, horisontalpages, indicator, formenu, footerblock, indicatorhidden } = styles
+const { container, horisontalpages, indicator, footerblock, indicatorhidden } = styles
 
 // const url = 'https://mygsr.ru/get_news_page?page=0&category='
 
@@ -58,6 +58,7 @@ class ProjectsLayout extends Component {
 
   makeRequest = () => {
     const { page } = this.state;
+    // получить список проектов ГК Росатом
     const url = `https://mygsr.ru/get_projects_page?page=${page}`;
     axios.get(url)
       .then(res => {
@@ -70,6 +71,8 @@ class ProjectsLayout extends Component {
       })
   }
 
+
+  // загружаем новую страницу при прокрутке
   handleLoadMore = () => {
     this.setState({
       page: this.state.page + 1,
@@ -78,6 +81,7 @@ class ProjectsLayout extends Component {
     })
   }
 
+  // рисуем футер
   renderFooter = () => {
     const {isLoading } = this.state
     return (
@@ -90,6 +94,7 @@ class ProjectsLayout extends Component {
 
 
 
+  // выводим проект. если прописана ссылка то проект открывает webview иначе просто проект с описанием
   renderItem(item) {
     if (item.item.link == ''){
       return (
@@ -107,7 +112,8 @@ class ProjectsLayout extends Component {
   }
 
   render() {
-    console.log(this.state.data)
+
+    // выводим прелоадер при загрузке
     if (this.state.isLoading) {
       return (
         <View style={{ flex: 1, padding: 20 }}>

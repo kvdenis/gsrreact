@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, ScrollView, Image, Text, TouchableOpacity, WebView } from 'react-native'
 import HTMLView from 'react-native-htmlview'
-// import { WebView } from 'react-native-webview'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
-
+// получить текст правил
 const url = 'https://mygsr.ru/get_app_rules'
 
 const styles = StyleSheet.create({
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   }
 })
-
+// html стили текста
 const htmlstyles = StyleSheet.create({
   a: {
     color: '#07296F'
@@ -69,6 +69,7 @@ class ProfileRules extends Component {
   async componentDidMount(){
     const { params } = this.props.navigation.state;
 
+    // получаем данные
     try {
       const response = await fetch(url)
       const data = await response.json()

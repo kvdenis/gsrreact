@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 import { StyleSheet, ScrollView, View, Image, Text, Animated, TouchableOpacity, AsyncStorage } from 'react-native'
 import HTMLView from 'react-native-htmlview'
 import axios from 'axios'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
+// ссылка для получения данных
 const url = 'https://mygsr.ru/get_business_by_id?id='
 
 const styles = StyleSheet.create({
@@ -13,18 +16,22 @@ const styles = StyleSheet.create({
     height: h - 64,
     backgroundColor: 'white'
   },
+  // скрытый контейнер
   containerhidden: {
     display: 'none'
   },
+  // блок с прокруткой
   scrollcontainer: {
     position: 'absolute',
     width: w,
     height: h - 104
   },
+  // фото компании
   simage: {
     width: w,
     height: 187
   },
+  // дата
   datestyle: {
     fontSize: 12,
     lineHeight: 14,
@@ -32,6 +39,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingTop: 20
   },
+  // заголовок
   titlestyle: {
     fontSize: 16,
     lineHeight: 20,
@@ -42,6 +50,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     width: w - 60
   },
+  // текст
   textstyle: {
     fontSize: 14,
     lineHeight: 18,
@@ -50,18 +59,21 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     opacity: 0.3
   },
+  // иконка избранного
   iconsblock: {
     position: 'absolute',
     top: 190,
     right: 10,
     flexDirection: 'row'
   },
+  // изображение иконки
   iconbtn: {
     width: 44,
     height: 44,
     marginLeft: -8
   },
 })
+// html стили текста
 const htmlstyles = StyleSheet.create({
   a: {
     color: '#07296F'
@@ -74,6 +86,8 @@ const htmlstyles = StyleSheet.create({
     paddingBottom: 20
   }
 })
+
+// html стили контактов
 const htmlcontactsstyles = StyleSheet.create({
   a: {
     color: '#07296F'
@@ -91,7 +105,6 @@ const htmlcontactsstyles = StyleSheet.create({
 const { scrollcontainer, container, containerhidden, datestyle, simage, titlestyle, textstyle, iconsblock, iconbtn } = styles
 
 class OpenBusiness extends Component {
-  nScroll = new Animated.Value(0);
 
   constructor(props) {
     super(props)
@@ -104,7 +117,7 @@ class OpenBusiness extends Component {
     const itemId = params ? params.itemId : null;
     this.setState({ itemId: itemId })
 
-
+      // получаем даные пользователя чтобы проверить в избранном или нет
         AsyncStorage.getItem("userdata").then((value) => {
           if (value != null){
             this.setState({
@@ -114,6 +127,7 @@ class OpenBusiness extends Component {
           }else{
 
           }
+          // определяем избранное или нет
           const favurl = `https://mygsr.ru/is_favorite_ios?part=10&partid=${itemId}&userid=${this.state.userdata.id}&token=${this.state.userdata.token}`
 
           console.log(favurl)
@@ -138,6 +152,8 @@ class OpenBusiness extends Component {
   addRemoveFavourite() {
     const { isfav } = this.state
     const par = this
+
+    // получаем данные пользователя чтобы удалить или добавить в избранное
     AsyncStorage.getItem("userdata").then((value) => {
 
       if (value != null){
@@ -145,7 +161,9 @@ class OpenBusiness extends Component {
           userdata: JSON.parse(value)
         })
 
+        // добавление в избранное
         var favapiurl = 'https://mygsr.ru/addfavorite'
+        // если уже в избранном удаляем из избранного
         if (isfav > 0){
           favapiurl = 'https://mygsr.ru/removefavorite'
         }
@@ -183,6 +201,7 @@ class OpenBusiness extends Component {
           console.log(error);
         })
       }else{
+        // если не авторизован открываем окно авторизации
         this.props.navigation.navigate('Auth')
       }
 
@@ -191,6 +210,7 @@ class OpenBusiness extends Component {
     });
   }
 
+  // увелиыиваем фото при прокрутке
   onScroll(event) {
     if (event.nativeEvent.contentOffset.y < 0){
       this.setState({
@@ -207,6 +227,8 @@ class OpenBusiness extends Component {
 
   render() {
     const { data, isLoading, isfav, imageheight, imagetop } = this.state
+
+    // формируем контакты
     var conatcts_str = ''
     if (data.phone != ''){
       conatcts_str += 'Телефон: <a href="callto:' + data.phone + '">' + data.phone + '</a>\n'
@@ -218,7 +240,7 @@ class OpenBusiness extends Component {
       conatcts_str += 'Сайт: <a href="' + data.site + '">' + data.site + '</a>\n'
     }
     conatcts_str += data.address
-    
+
     return (
       <View style={isLoading ? containerhidden : container}>
         <Image source={{ uri: data.image }} style={[simage, {height: imageheight, top: imagetop}]}  resizeMode="cover" />

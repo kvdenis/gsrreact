@@ -3,13 +3,16 @@ import { Text, View, Image, StyleSheet, Animated, Easing, ActivityIndicator, Tou
 import { NavigationEvents } from 'react-navigation';
 import { BusinessItem } from './BusinessItem'
 import axios from 'axios';
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
 const styles = StyleSheet.create({
   container: {
     height: h - 64
   },
+  // закладки
   bookmarks: {
     height: 30,
     width: '100%',
@@ -19,6 +22,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     zIndex: 1
   },
+  // подчеркивание активной закладки
   bookmarksline: {
     position: 'absolute',
     width: (w / 2 - 22),
@@ -26,6 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EB7155',
     bottom: 0
   },
+  // кнопка Все
   allbutton: {
     position: 'absolute',
     fontSize: 14,
@@ -33,33 +38,39 @@ const styles = StyleSheet.create({
     height: 30,
     lineHeight: 20
   },
+  // текст кнопки в закладке
   bookmarktext: {
     flex: 1,
     textAlign: 'center',
     lineHeight: 20,
     color: '#07296F'
   },
+  // кнопка фильтра
   filterbutton: {
     position: 'absolute',
     width: 44,
     height: 30,
     left: w - 44
   },
+  // иконка кнопки
   filterbuttonimg: {
     position: 'absolute',
     width: 44,
     height: 30
   },
+  // список новостей
   newslistview: {
     width: w,
     height: h - 30,
     flex: 1,
     flexDirection: 'row'
   },
+  // блок с нвоостями
   newspage: {
     width: w,
     height: h - 94
   },
+  // блок с горизонтальной прокруткой для закладок
   horisontalpages: {
     flexWrap: 'nowrap',
     flexDirection: 'row',
@@ -67,6 +78,7 @@ const styles = StyleSheet.create({
     height: h - 90,
     overflow: 'hidden'
   },
+  // прелоадер
   indicator: {
     paddingTop: 20,
     paddingBottom: 20,
@@ -253,6 +265,7 @@ class CompaniesLayout extends Component {
   componentDidMount = async () => {
 
     var par = this
+    // получаем данные о городе в AsyncStorage
     AsyncStorage.getItem("city").then((value) => {
       par.setState({
         filtercity: JSON.parse(value).title,
@@ -274,6 +287,7 @@ class CompaniesLayout extends Component {
   makeRequest = () => {
 
     const { page, cityid, char } = this.state
+    // ссылка для получения данных постранично с идентификатором города и фильтром буквой
     const url = `https://mygsr.ru/get_companies_page?page=${page}&city=${cityid}&char=${char}`
     axios.get(url)
       .then(res => {
@@ -293,6 +307,7 @@ class CompaniesLayout extends Component {
         this.setState({
           userdata: JSON.parse(value)
         })
+        // ссылка для получения избранных
         const favurl = `https://mygsr.ru/get_favorite_page?part=7&page=${favpage}&userid=${this.state.userdata.id}`
         axios.get(favurl)
           .then(favres => {
@@ -316,6 +331,7 @@ class CompaniesLayout extends Component {
   }
 
 
+  // загрузка страницы при прокрутке
   handleLoadMore = () => {
     this.setState({
       page: this.state.page + 1,
@@ -323,6 +339,7 @@ class CompaniesLayout extends Component {
       this.makeRequest()
     })
   }
+  // загрузка страницы избранного при прокрутке
   handleLoadMoreFav = () => {
     this.setState({
       favpage: this.state.favpage + 1,
@@ -331,6 +348,7 @@ class CompaniesLayout extends Component {
     })
   }
 
+  // рисуем футер
   renderFooter = () => {
     const {isLoading } = this.state
     return (
@@ -339,6 +357,7 @@ class CompaniesLayout extends Component {
       </View>
     );
   };
+  // рисуем футер избранного
   renderFavFooter = () => {
     const {isFavLoading } = this.state
     return (
@@ -349,6 +368,7 @@ class CompaniesLayout extends Component {
   };
 
 
+  // обработка после возврата на страницу при выборе нового города в меню
   handlePageChange = () => {
     var par = this
     AsyncStorage.getItem("city").then((value) => {
@@ -366,6 +386,7 @@ class CompaniesLayout extends Component {
       par.makeFavRequest()
     })
   }
+  // смена активности заклаки при горизонтальном скролле
   onScroll(event) {
     if (event.nativeEvent.contentOffset.x > 0){
       let x_pos = (event.nativeEvent.contentOffset.x * (w/2-22)) / w
@@ -374,6 +395,7 @@ class CompaniesLayout extends Component {
       this.setState({ bookmarkslinex: 0 })
     }
   }
+  // нажатие на заклаки
   typePage(page){
     const { filteropen } = this.state
     this.setState({ filteropen: false })
@@ -385,6 +407,7 @@ class CompaniesLayout extends Component {
     console.log(page)
     this.state.itemsScrollView.scrollTo({x: w * page, y: 0, animated: true})
   }
+  // скрываем показываем фильтр
   filterPress(){
     const { filteropen } = this.state
     this.setState({ filteropen: !filteropen })
@@ -403,8 +426,10 @@ class CompaniesLayout extends Component {
     }
   }
 
+  // применить фильтр
   filterSubmit() {
     const { page, cityid, char } = this.state
+    // ссылка для получения списика по букве и городу
     const url = `https://mygsr.ru/get_companies_page?page=0&city=${cityid}&char=${char}`
     this.setState({
       page: 0,
@@ -434,6 +459,7 @@ class CompaniesLayout extends Component {
       char: char
     })
     const { page, cityid } = this.state
+    // ссылка для получения списика по букве и городу
     const url = `https://mygsr.ru/get_companies_page?page=0&city=${cityid}&char=${char}`
     this.setState({
       page: 0,
@@ -463,6 +489,7 @@ class CompaniesLayout extends Component {
   render() {
     const {isLoading, isFavLoading, data, favdata, bookmarkslinex, filtery, filteropen, userlogined, refreshfav, isFocused, categories, filterids, filtercity, chars } = this.state
 
+    // в зависимости открыт или нет фильтр выводим нужную иконку
     let filterimage = images.filter
     if (filteropen){
       filterimage = images.filter_active

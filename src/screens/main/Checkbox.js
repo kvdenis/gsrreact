@@ -1,7 +1,9 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
+// импорт картинок
 import images from 'res/images'
-// import OpenNews from './OpenNews'
+// добавляем ширину и высоту экрана
+import { w, h } from '../../../constants'
 
 const styles = StyleSheet.create({
   container: {
@@ -32,11 +34,10 @@ const styles = StyleSheet.create({
   }
 })
 
-
+// Отрисовывем чекбокс с текстом для фильров
 const Checkbox = ({ data }) => {
   const { filteritem, filterchb, filtertitle } = styles
   const { title } = data.item
-  // console.log(data)
   return (
     <TouchableOpacity style={filteritem} onPress={ref => {this.clickChb(ref)}} activeOpacity={0.8}>
       <View style={filterchb}></View>

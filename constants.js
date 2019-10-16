@@ -1,6 +1,9 @@
 import { Dimensions } from 'react-native'
 
+// Основной домен для API
 export const apiurl = 'https://mygsr.ru/'
+
+// Опредение размеров экрана
 export const win = Dimensions.get('window')
 export const w = win.width
 export const h = win.height

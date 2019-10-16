@@ -4,7 +4,9 @@ import { NavigationEvents } from 'react-navigation';
 import { AnonsItem } from './AnonsItem'
 import { AdsItem } from './AdsItem'
 import axios from 'axios';
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
 const styles = StyleSheet.create({
@@ -12,6 +14,7 @@ const styles = StyleSheet.create({
     height: h - 64,
     overflow: 'hidden'
   },
+  // закладки
   bookmarks: {
     height: 30,
     width: '100%',
@@ -21,6 +24,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     zIndex: 3
   },
+  // подчеркивание активной закладки
   bookmarksline: {
     position: 'absolute',
     width: (w / 2 - 22),
@@ -28,6 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EB7155',
     bottom: 0
   },
+  // кнопка Все
   allbutton: {
     position: 'absolute',
     fontSize: 14,
@@ -35,29 +40,34 @@ const styles = StyleSheet.create({
     height: 30,
     lineHeight: 20
   },
+  // текст кнопки в закладке
   bookmarktext: {
     flex: 1,
     textAlign: 'center',
     lineHeight: 20,
     color: '#07296F'
   },
+  // кнопка фильтра
   filterbutton: {
     position: 'absolute',
     width: 44,
     height: 30,
     left: w - 44
   },
+  // иконка кнопки
   filterbuttonimg: {
     position: 'absolute',
     width: 44,
     height: 30
   },
+  // список
   listview: {
     width: w,
     height: h - 30,
     flex: 1,
     flexDirection: 'row'
   },
+  // список
   listviewinner: {
     width: w*2,
     height: h - 30,
@@ -68,6 +78,7 @@ const styles = StyleSheet.create({
     width: w,
     height: h - 124,
   },
+  // блок с горизонтальной прокруткой для закладок
   horisontal_an_add:{
     flexWrap: 'nowrap',
     flexDirection: 'row',
@@ -77,6 +88,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     left: w
   },
+  // блок с горизонтальной прокруткой для закладок
   horisontalpages: {
     flexWrap: 'nowrap',
     flexDirection: 'row',
@@ -112,6 +124,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     left: w/2 - 27
   },
+  // прелоадер
   indicator: {
     paddingTop: 20,
     paddingBottom: 20,
@@ -318,6 +331,7 @@ class AnonsLayout extends Component {
 
   makeRequest = () => {
     const { page } = this.state;
+    // ссылка для получения данных анонса
     const url = `https://mygsr.ru/get_anons_page?category=&page=${page}`
     axios.get(url)
       .then(res => {
@@ -331,6 +345,7 @@ class AnonsLayout extends Component {
   }
   makeAdsRequest = () => {
     const { adspage } = this.state;
+    // ссылка для получения данных объявлений
     const adsurl = `https://mygsr.ru/get_ads_page?category=&page=${adspage}`
     console.log(adsurl)
     axios.get(adsurl)
@@ -346,7 +361,6 @@ class AnonsLayout extends Component {
   }
 
   makeFavRequest = () => {
-    console.log(111222)
     const { favpage } = this.state;
     AsyncStorage.getItem("userdata").then((value) => {
 
@@ -354,6 +368,7 @@ class AnonsLayout extends Component {
         this.setState({
           userdata: JSON.parse(value)
         })
+        // ссылка для получения избранного
         const favurl = `https://mygsr.ru/get_favorite_page?part=3&page=${favpage}&userid=${this.state.userdata.id}`
 
         console.log(favurl)
@@ -378,6 +393,7 @@ class AnonsLayout extends Component {
     })
   }
 
+  // загрузка страницы анонсов при прокрутке
   handleLoadMore = () => {
     this.setState({
       page: this.state.page + 1,
@@ -385,6 +401,7 @@ class AnonsLayout extends Component {
       this.makeRequest();
     })
   }
+  // загрузка страницы объявлений при прокрутке
   handleLoadMoreAds = () => {
     this.setState({
       adspage: this.state.adspage + 1,
@@ -392,6 +409,7 @@ class AnonsLayout extends Component {
       this.makeAdsRequest();
     })
   }
+  // загрузка страницы избранного при прокрутке
   handleLoadMoreFav = () => {
     this.setState({
       favpage: this.state.favpage + 1,
@@ -399,6 +417,8 @@ class AnonsLayout extends Component {
       this.makeFavRequest()
     })
   }
+
+  // рисуем футер для анонса
   renderFooter = () => {
     return (
       <View style={styles.headerBg}>
@@ -407,6 +427,7 @@ class AnonsLayout extends Component {
     )
   }
 
+  // рисуем футер для объявлений
   renderAdsFooter = () => {
     return (
       <View style={styles.headerBg}>
@@ -414,6 +435,7 @@ class AnonsLayout extends Component {
       </View>
     )
   }
+  // рисуем футер избранного
   renderFavFooter = () => {
     const {isFavLoading } = this.state
     return (
@@ -423,6 +445,7 @@ class AnonsLayout extends Component {
     );
   };
 
+  // обработка после возврата на страницу при выборе нового города в меню
   handlePageChange = () => {
     var par = this
     AsyncStorage.getItem("city").then((value) => {
@@ -442,6 +465,7 @@ class AnonsLayout extends Component {
 
   }
 
+  // создаем анонс
   renderItem(item) {
     return (
       <TouchableOpacity onPress={() => this.props.navigation.navigate('OpenAnonsScreen', {itemId: item.item.id})} activeOpacity={0.8}>
@@ -449,6 +473,7 @@ class AnonsLayout extends Component {
       </TouchableOpacity>
     )
   }
+  // создаем объявление
   renderAdsItem(item) {
     return (
       <TouchableOpacity onPress={() => this.props.navigation.navigate('OpenAdsScreen', {itemId: item.item.id})} activeOpacity={0.8}>
@@ -456,6 +481,7 @@ class AnonsLayout extends Component {
       </TouchableOpacity>
     )
   }
+  // создаем избранные анонс и объявление в зависимости от того какой тип вернулся с сервера. если ad = 1 то это объявление
   renderFavItem(item) {
     if (item.item.ad == "1"){
       return (
@@ -472,6 +498,7 @@ class AnonsLayout extends Component {
     }
 
   }
+  // смена активности заклаки при горизонтальном скролле
   onScroll(event) {
     let x_pos = w/2 - 27 - (event.nativeEvent.contentOffset.x * 90 / w)
     if (event.nativeEvent.contentOffset.x > w){
@@ -488,6 +515,7 @@ class AnonsLayout extends Component {
     }
     this.setState({ typelinex: x_pos })
   }
+  // нажатие на заклаки
   typePage(page){
     const { filteropen } = this.state
     this.setState({ filteropen: false })
@@ -498,6 +526,8 @@ class AnonsLayout extends Component {
     }).start()
     this.state.anonsScrollView.scrollTo({x: w * page, y: 0, animated: true})
   }
+
+  // скрываем показываем фильтр
   filterPress(){
     const { filteropen } = this.state
     this.setState({ filteropen: !filteropen })
@@ -515,6 +545,7 @@ class AnonsLayout extends Component {
       }).start()
     }
   }
+  // применить фильтр
   filterSubmit() {
     var par = this
     const { page, adspage, cityid } = this.state
@@ -526,6 +557,7 @@ class AnonsLayout extends Component {
       filteropen: false
     })
 
+    // ссылка для получения данных первой страницы в зависимости от города
     const url = `https://mygsr.ru/get_anons_page?page=0&city=${cityid}`
     const adsurl = `https://mygsr.ru/get_ads_page?page=0&city=${cityid}`
 
@@ -555,6 +587,8 @@ class AnonsLayout extends Component {
   render() {
 
     const {data, adsdata, favdata, typelinex, type1opacity, type2opacity, bookmarkslinex, filtery, filteropen, filteritem, filterchb, filtertitle, filterchbselect, filtercity, isLoading, isAdsLoading, isFavLoading} = this.state
+
+    // выводим прелоадер при загрузке
     if (this.state.isLoading) {
       return (
         <View style={{ flex: 1, padding: 20 }}>
@@ -563,6 +597,7 @@ class AnonsLayout extends Component {
       )
     }
 
+    // в зависимости открыт или нет фильтр выводим нужную иконку
     let filterimage = images.filter
     if (filteropen){
       filterimage = images.filter_active

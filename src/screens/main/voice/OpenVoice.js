@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import { StyleSheet, ScrollView, TouchableOpacity, View, Image, Text, Animated, AsyncStorage } from 'react-native'
 import HTMLView from 'react-native-htmlview'
 import axios from 'axios'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
-
+// получить данные голосвания по ID
 const url = 'https://mygsr.ru/get_voice_by_id?id='
 
 const styles = StyleSheet.create({
@@ -13,9 +15,11 @@ const styles = StyleSheet.create({
     height: h - 64,
     backgroundColor: 'white'
   },
+  // скрытый блок
   containerhidden: {
     display: 'none'
   },
+  // дата
   datestyle: {
     fontSize: 12,
     lineHeight: 14,
@@ -23,6 +27,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingTop: 20
   },
+  // заголовок
   titlestyle: {
     fontSize: 16,
     lineHeight: 20,
@@ -32,6 +37,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingTop: 16
   },
+  // инициатор
   initial: {
     fontSize: 12,
     lineHeight: 14,
@@ -39,6 +45,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingBottom: 16
   },
+  // текст
   textstyle: {
     fontSize: 14,
     lineHeight: 18,
@@ -47,9 +54,11 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     opacity: 0.3
   },
+  // ответ
   answer: {
     marginBottom: 10
   },
+  // текст ответа
   answertext: {
     fontSize: 14,
     paddingLeft: 16,
@@ -57,6 +66,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: '#5494CE'
   },
+  // прогрессбар ответа
   answerprogress: {
     width: w - 72,
     left: 16,
@@ -65,10 +75,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#DFE2E6',
     marginTop: 5
   },
+  // цвет прогресс бара
   answerprogressimg:{
     height: 6,
     borderRadius: 3
   },
+  // надпись о том сколько ответов можно выбрать
   answerstype: {
     paddingLeft: 16,
     fontSize: 16,
@@ -76,11 +88,13 @@ const styles = StyleSheet.create({
     color: '#07296F',
     marginBottom: 10
   },
+  // ответ для выбора
   filteritem: {
     paddingLeft: 16,
     paddingTop: 10,
     flexDirection: 'row'
   },
+  // чекбокса ответа
   filterchb: {
     width: 17,
     height: 17,
@@ -89,10 +103,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#07296F'
   },
+  // текст ответа
   filtertitle: {
     fontSize: 16,
     color: '#07296F'
   },
+  // чекбокс поставлен
   filterchbselect: {
     width: 17,
     height: 17,
@@ -102,25 +118,7 @@ const styles = StyleSheet.create({
     borderColor: '#07296F',
     backgroundColor: '#07296F'
   },
-  filtersubmit: {
-    marginLeft: 30,
-    width: w - 60,
-    height: 48,
-    marginTop: 30
-  },
-  filtersubmitimg: {
-    position: 'absolute',
-    width: w - 60,
-    height: 48,
-    borderRadius: 24
-  },
-  filtersubmittext: {
-    width: w - 60,
-    lineHeight: 48,
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 17
-  },
+  // отпарвить ответ
   sendbutton: {
     marginTop: 20,
     marginLeft: 16,
@@ -129,18 +127,21 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 70
   },
+  // фон кнопки отправки отвтеа
   sendbuttonimg: {
     position: 'absolute',
     width: w - 32,
     height: 48,
     borderRadius: 24
   },
+  // текст кнопки
   sendbuttontext: {
     fontSize: 17,
     color: 'white',
     lineHeight: 48,
     textAlign: 'center'
   },
+  // кнопка комментариев
   commentbtn: {
     position: 'absolute',
     left: 0,
@@ -150,17 +151,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f7fb',
     flexDirection: 'row'
   },
+  // иконка кнопки
   commentbtnimg: {
     width: 40,
     height: 40,
     marginTop: 5,
     marginLeft: 10
   },
+  // текст кнопки
   commentbtntext: {
     fontSize: 17,
     color: '#07296F',
     lineHeight: 46
   },
+  // количество комментариев
   commentcounttext: {
     fontSize: 17,
     color: '#71859E',
@@ -168,6 +172,8 @@ const styles = StyleSheet.create({
     marginLeft: 5
   }
 })
+
+// html стили текста
 const htmlstyles = StyleSheet.create({
   a: {
     color: '#07296F'
@@ -184,7 +190,7 @@ const htmlstyles = StyleSheet.create({
 //     navigator: Object
 // };
 
-const { container, containerhidden, datestyle, titlestyle, textstyle, initial, answer, answerprogress, answertext, answerprogressimg, answerstype, filteritem, filterchb, filtertitle, filterchbselect, filtersubmit, filtersubmitimg, filtersubmittext, sendbutton, sendbuttontext, sendbuttonimg, commentbtn, commentbtnimg, commentbtntext, commentcounttext } = styles
+const { container, containerhidden, datestyle, titlestyle, textstyle, initial, answer, answerprogress, answertext, answerprogressimg, answerstype, filteritem, filterchb, filtertitle, filterchbselect, sendbutton, sendbuttontext, sendbuttonimg, commentbtn, commentbtnimg, commentbtntext, commentcounttext } = styles
 
 class OpenVoice extends Component {
 
@@ -202,7 +208,7 @@ class OpenVoice extends Component {
     this.setState({ itemId: itemId, part: part })
 
 
-
+    // получаем данные пользователя
     AsyncStorage.getItem("userdata").then((value) => {
       if (value != null){
         this.setState({
@@ -212,7 +218,9 @@ class OpenVoice extends Component {
       }else{
 
       }
+      // получить данные голосвания по ID
       const url = `https://mygsr.ru/get_voice_by_id?id=${itemId}`
+      // получить количество комментариев в голосовании
       const commentsurl = `https://mygsr.ru/get_comments_count?part=${part}&partid=${itemId}`
 
       axios.all([axios.get(url),
@@ -237,10 +245,13 @@ class OpenVoice extends Component {
 
   }
 
+
+  // обрабатывам нажатие на ответ
   clickChb(id) {
     console.log(id)
     var ids = this.state.ids
 
+    // если у опроса можно выбрать несколько овтетов ставим всем активность иначе убираем у всех и ставим одному пункту
     if (this.state.data.multi == 1) {
       ids[id] = !ids[id]
     }else{

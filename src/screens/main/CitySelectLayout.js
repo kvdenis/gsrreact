@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, ScrollView, Image, TouchableOpacity, Text, Dimentions, TextInput, Alert, AsyncStorage, PickerIOS, Picker } from 'react-native'
 import axios from 'axios';
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../constants'
-
+// вычисляем коэффициент для размера экрана отностилеьно 375 пикселей
 const koef = w / 375
 const styles = StyleSheet.create({
   container: {
@@ -52,6 +54,7 @@ class CitySelectLayout extends Component {
     this.state = {city: '', cities: [], citytitle: ''}
   }
   componentDidMount() {
+    // ссылка для получения городов
     const url = `https://mygsr.ru/get_cities_ios`
     axios.get(url)
       .then(res => {
@@ -63,20 +66,19 @@ class CitySelectLayout extends Component {
       })
   }
 
+  // записываем в AsyncStorage выбранный город и закрываем модальное окно
   pickerSubmit = async () => {
     var values = {id: this.state.city, title: this.state.citytitle};
 
     var par = this.props.navigation
     par.goBack()
-    console.log(values)
     try {
       await AsyncStorage.setItem('city', JSON.stringify(values))
     } catch (e) {
     }
-
-
   }
 
+  // прпоисываем в State данные  о выбранном городе: id и название
   setInfo(itemValue, itemIndex) {
     this.setState({city: itemValue, citytitle: this.state.cities[itemIndex-1].title })
     if (itemIndex >= 0){

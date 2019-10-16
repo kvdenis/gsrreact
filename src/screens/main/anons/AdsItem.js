@@ -1,8 +1,9 @@
 import React from 'react'
 import { StyleSheet, View, Image, Text } from 'react-native'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину экрана
 import { w } from '../../../../constants'
-// import OpenNews from './OpenNews'
 
 const styles = StyleSheet.create({
   container: {
@@ -43,7 +44,10 @@ const styles = StyleSheet.create({
 const AdsItem = ({ data }) => {
   const { container, simage, datestyle, titlestyle, adsicon } = styles
   const { dte, tpe, time, title } = data.item
+
+  // если тип объявления важный то красная иконка
   let image = images.adred
+  // если тип объявления не особо важный - синяя
   if (tpe != "1"){
     image = images.adblue
   }

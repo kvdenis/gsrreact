@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
 import { StyleSheet, ScrollView, Image, Text, Animated, ListView, TouchableOpacity, View, AsyncStorage, Share } from 'react-native'
-import { CountryNewsLayout } from './CountryNewsLayout'
-import { NavigationActions } from 'react-navigation'
 import { OtherNewsItem } from './OtherNewsItem'
 import HTMLView from 'react-native-htmlview'
 import axios from 'axios'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
+// ссылка для получения данных
 const url = 'https://mygsr.ru/get_news_by_id?id='
-const favurl = 'https://mygsr.ru/is_favorite_ios'
-const otherurl = 'https://mygsr.ru/get_other_news?category=12&id='
+// const favurl = 'https://mygsr.ru/is_favorite_ios'
+// const otherurl = 'https://mygsr.ru/get_other_news?category=12&id='
 
 const styles = StyleSheet.create({
   container: {
@@ -18,18 +19,22 @@ const styles = StyleSheet.create({
     height: h - 64,
     backgroundColor: 'white'
   },
+  // скрытый контейнер
   containerhidden: {
     display: 'none'
   },
+  // блок с прокруткой
   scrollcontainer: {
     width: w,
     height: h - 104
   },
+  // фото
   simage: {
     position: 'absolute',
     width: w,
     height: 187
   },
+  // дата
   datestyle: {
     fontSize: 12,
     lineHeight: 14,
@@ -37,6 +42,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingTop: 20
   },
+  // заголовок
   titlestyle: {
     fontSize: 16,
     lineHeight: 20,
@@ -46,6 +52,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     paddingTop: 10
   },
+  // текст категории
   categorystyle: {
     fontSize: 12,
     lineHeight: 14,
@@ -53,6 +60,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingTop: 10
   },
+  // текст
   textstyle: {
     fontSize: 16,
     lineHeight: 20,
@@ -61,17 +69,20 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     opacity: 0.3
   },
+  // блок с иконками
   iconsblock: {
     position: 'absolute',
     top: 190,
     right: 10,
     flexDirection: 'row'
   },
+  // иконка
   iconbtn: {
     width: 44,
     height: 44,
     marginLeft: -8
   },
+  // количество лайков
   liketext: {
     fontSize: 14,
     lineHeight: 44,
@@ -79,6 +90,7 @@ const styles = StyleSheet.create({
     marginLeft: -6,
     paddingRight: 6
   },
+  // кнпока комментариев
   commentbtn: {
     position: 'absolute',
     left: 0,
@@ -88,26 +100,31 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f7fb',
     flexDirection: 'row'
   },
+  // иконка кнопки комментарев
   commentbtnimg: {
     width: 40,
     height: 40,
     marginTop: 5,
     marginLeft: 10
   },
+  // текст кнопки
   commentbtntext: {
     fontSize: 17,
     color: '#07296F',
     lineHeight: 46
   },
+  // количество комментариев
   commentcounttext: {
     fontSize: 17,
     color: '#71859E',
     lineHeight: 46,
     marginLeft: 5
   },
+  // блок с другими новостями
   othernews:{
     paddingBottom: 80
   },
+  // загловок блока с другими новостями
   othernewstitle:{
     paddingLeft: 16,
     paddingRight: 16,
@@ -127,9 +144,7 @@ const htmlstyles = StyleSheet.create({
     fontSize: 14
   }
 })
-// type Props = {
-//     navigator: Object
-// };
+
 
 const { container, containerhidden, scrollcontainer, datestyle, simage, titlestyle, textstyle, categorystyle, iconsblock, iconbtn, liketext, commentbtn, commentbtnimg, commentbtntext, commentcounttext, othernews, othernewstitle } = styles
 
@@ -143,6 +158,7 @@ class OpenNews extends Component {
 
 
 
+  // обрабатываем кнопка шаринга
   share = async () => {
     const par = this
     try {
@@ -183,12 +199,12 @@ class OpenNews extends Component {
       }else{
 
       }
+      // определяем в избранном или нет
       const favurl = `https://mygsr.ru/is_favorite_ios?part=${part}&partid=${itemId}&userid=${this.state.userdata.id}&token=${this.state.userdata.token}`
+      // лайкнул новость или нет
       const likeurl = `https://mygsr.ru/is_news_liked?id=${itemId}&userid=${this.state.userdata.id}&token=${this.state.userdata.token}`
-
+      // ссылка для получения количества комментариев
       const commentsurl = `https://mygsr.ru/get_comments_count?part=${part}&partid=${itemId}`
-
-      // const otherurl = `https://mygsr.ru/get_other_news?id=${itemId}&category=${category}`
 
       axios.all([axios.get(url + itemId),
                 axios.get(favurl),
@@ -216,6 +232,7 @@ class OpenNews extends Component {
   }
 
   loadOtherNews(itemId, category){
+    // получаем другие новости из категории теуущей новости
     const otherurl = `https://mygsr.ru/get_other_news?id=${itemId}&category=${category}`
 
     axios.all([axios.get(otherurl)])
@@ -231,6 +248,7 @@ class OpenNews extends Component {
   addRemoveFavourite() {
     const { isfav } = this.state
     const par = this
+    // получаем данные для добавления и удаления из избранного
     AsyncStorage.getItem("userdata").then((value) => {
 
       if (value != null){
@@ -238,7 +256,9 @@ class OpenNews extends Component {
           userdata: JSON.parse(value)
         })
 
+        // добавляем в избранное
         var favapiurl = 'https://mygsr.ru/addfavorite'
+        // если уже в избранно удаляем из избранного
         if (isfav > 0){
           favapiurl = 'https://mygsr.ru/removefavorite'
         }
@@ -288,6 +308,8 @@ class OpenNews extends Component {
   likeDislike(val) {
     const { likeed, likestat, isfav, likes, dislikes } = this.state
     const par = this
+
+    // получаем данные для лакйа и дизлайка
     AsyncStorage.getItem("userdata").then((value) => {
 
       if (value != null){
@@ -295,7 +317,9 @@ class OpenNews extends Component {
           userdata: JSON.parse(value)
         })
 
+        // ставим лайк новости
         var likeurl = 'https://mygsr.ru/addnewslike'
+        // если уже стоит лайк удаляем его
         if (likeed != 0 && likestat == 1 && val == 1){
           likeurl = 'https://mygsr.ru/removenewslike'
         }else if (likeed != 0 && likestat != 1 && val == 0){
@@ -323,19 +347,25 @@ class OpenNews extends Component {
           data: formBody
         })
         .then(function (response) {
+          // если небыло лайка и нажали на лайк
           if (likeurl == 'https://mygsr.ru/addnewslike' && val == 1){
+            // если уже был поставлен дизлайк то убирайем дизайлк и добавляем лайк иначе просто добавляем лайк
             if (likeed == 1 && likestat == 0){
               par.setState({ likeed: 1 , likestat: 1, dislikes: dislikes - 1, likes: likes + 1 })
             }else{
               par.setState({ likeed: 1 , likestat: 1, likes: likes + 1 })
             }
+            // если небыло лайка и нажали на дизлайк
           } else if (likeurl == 'https://mygsr.ru/addnewslike' && val == 0){
+            // если был лайк то удаляем лайк и добавляем дизлайк иначе просто добавляем дизлайк
             if (likeed == 1 && likestat == 1){
               par.setState({ likeed: 1 , likestat: 0, dislikes: dislikes + 1, likes: likes - 1 })
             }else{
               par.setState({ likeed: 1 , likestat: 0, dislikes: dislikes + 1 })
             }
+            // если был лайк
           } else if (likeurl == 'https://mygsr.ru/removenewslike'){
+            // если нажали на лайк то убираем лайк, если нажали на дизалйк убираем дизлайк
             if (val == 1){
               par.setState({ likeed: 0 , likestat: 1, likes: likes - 1 })
             }else{
@@ -347,6 +377,7 @@ class OpenNews extends Component {
           console.log(error);
         })
       }else{
+        // если не авторизован открываем окно авторизации
         this.props.navigation.navigate('Auth')
       }
 
@@ -355,6 +386,7 @@ class OpenNews extends Component {
     });
   }
 
+  // увеличиваем фото при прокрутке
   onScroll(event) {
     if (event.nativeEvent.contentOffset.y < 0){
       this.setState({

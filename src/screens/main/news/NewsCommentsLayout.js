@@ -4,13 +4,16 @@ import { Input, Button } from 'react-native-elements'
 import { NavigationEvents } from 'react-navigation'
 import { CommentItem } from './CommentItem'
 import axios from 'axios'
+// импорт картинок
 import images from 'res/images'
+// добавляем ширину и высоту экрана
 import { w, h } from '../../../../constants'
 
 const styles = StyleSheet.create({
   container: {
     height: h - 114
   },
+  // аватрака в форме
   avatar: {
     position: 'absolute',
     width: 40,
@@ -27,6 +30,7 @@ const styles = StyleSheet.create({
     top: 10,
     borderRadius: 20
   },
+  // имя
   username: {
     paddingTop: 21,
     paddingLeft: 71,
@@ -34,10 +38,12 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: '#07296F'
   },
+  // комменатрий
   commentitem: {
     borderBottomWidth: 1,
     borderBottomColor: '#E1E0EA'
   },
+  // текст комментария
   commenttext: {
     fontSize: 14,
     lineHeight: 16,
@@ -45,27 +51,32 @@ const styles = StyleSheet.create({
     paddingLeft: 71,
     paddingTop: 10
   },
+  // футер с формой
   commentfooter: {
     width: w,
     paddingLeft: 71,
     paddingTop: 14,
     paddingBottom: 20
   },
+  // кнпока лайка
   likebtn: {
     width: 16,
     height: 14,
     flexDirection: 'row'
   },
+  // икаонка лайка
   likebtnimage: {
     width: 16,
     height: 14
   },
+  // количество лайков
   likebtntext:{
     fontSize: 11,
     lineHeight: 14,
     paddingLeft: 5,
     color: '#9B99A9'
   },
+  // правая часть футера
   commentfooterright: {
     position: 'absolute',
     right: 18,
@@ -74,6 +85,7 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     color: '#9B99A9'
   },
+  // форма добавления комментария
   addform: {
     position: 'absolute',
     left: 0,
@@ -85,6 +97,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOpacity: 0.1
   },
+  // текстовое поле
   inputstyle: {
     color: '#71859E',
     textAlign: 'left',
@@ -104,19 +117,23 @@ const styles = StyleSheet.create({
     borderColor: '#E1E0EA',
     minHeight: 0
   },
+  // кнопка отправки
   sendbtn: {
     position: 'absolute',
     right: 10,
     top: 8,
   },
+  // текст кнопки отправки
   sendbtntext: {
     fontSize: 14,
     lineHeight: 20,
     color: '#07296F'
   },
+  // прелоадер
   indicator: {
     paddingTop: 10
   },
+  // кнопка атворизации
   authbtn: {
     position: 'absolute',
     left: 0,
@@ -130,6 +147,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     backgroundColor: '#f2f7fb'
   },
+  // текст кнпоки атворизации
   authbtntext: {
     position: 'absolute',
     width: w,
@@ -139,9 +157,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 50
   },
+  // скрываем форму
   addformhide: {
     display: 'none'
   },
+  // скрываем кнопку авторизации
   authbtnhide: {
     display: 'none'
   }
@@ -165,6 +185,7 @@ class NewsCommentsLayout extends Component {
     this.keyboardDidHideListener = Keyboard.addListener('keyboardWillHide', this._keyboardDidHide);
   }
 
+  // работа с клаиватурой
   _keyboardDidShow = (e) => {
     Animated.timing(this.animatedHeight, {
       toValue: (h - 114 - e.endCoordinates.height ),
@@ -185,6 +206,8 @@ class NewsCommentsLayout extends Component {
   sendPress(){
     // console.log(this.state.part)
     var par = this
+
+    // получить данные пользователя чтобы отправить комментарий с его данными
     AsyncStorage.getItem("userdata").then((value) => {
 
       if (value != null){
@@ -192,6 +215,7 @@ class NewsCommentsLayout extends Component {
           userdata: JSON.parse(value)
         })
 
+        // добавить комментарий
         var url = 'https://mygsr.ru/addcomment'
 
 
@@ -237,17 +261,19 @@ class NewsCommentsLayout extends Component {
     const part = params ? params.part : null
     this.setState({ itemId: itemId, part: part })
 
-    // console.log(itemId)
-
+    // получить данные пользователя и загрузить спиосок коммаентариев
     AsyncStorage.getItem("userdata").then((value) => {
       if (value != null){
         this.setState({
           userdata: JSON.parse(value),
+          // если авторизован то отображается кнопка добавления комментария, иначе кнопка атворизации
           userlogin: true
         })
       }else{
 
       }
+
+      // получить комментарии постранично
       const url = `https://mygsr.ru/get_comments_page_with_error?part=${part}&partid=${itemId}&userid=${this.state.userdata.id}&token=${this.state.userdata.token}&page=${page}`
 
       axios.get(url)
@@ -267,6 +293,8 @@ class NewsCommentsLayout extends Component {
     .then(res => {
     })
   }
+
+  // загружаем другие страницы при прокрутке
   handleLoadMore = () => {
     this.setState({
       page: this.state.page + 1,
@@ -275,6 +303,7 @@ class NewsCommentsLayout extends Component {
     })
   }
 
+  // рисуем футер с прелоадером
   renderFooter = () => {
     return (
       <View style={styles.headerBg}>
@@ -284,12 +313,14 @@ class NewsCommentsLayout extends Component {
   };
 
 
+  // вывод отдельного комментария
   renderItem(item) {
     return (
       <CommentItem data={item} key={item.id} />
     )
   }
 
+  // работа с плейсхолдером
   onCommFocus() {
     const { comm } = this.state
     this.setState({
@@ -310,6 +341,7 @@ class NewsCommentsLayout extends Component {
     // })
   }
 
+  // при возврате на страницу с комментариями
   handlePageChange = () => {
     AsyncStorage.getItem("userdata").then((value) => {
       if (value != null){
